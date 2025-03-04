@@ -1,0 +1,20 @@
+{
+    "name": "E314.DI.Tests",
+    "rootNamespace": "E314.DI.Tests",
+    "references": [
+        "E314.DI",
+        "E314.DataTypes",
+        "E314.Exceptions"
+    ],
+    "includePlatforms": [
+        "Editor"
+    ],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false
+}

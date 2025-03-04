@@ -1,0 +1,17 @@
+{
+    "name": "E314.DI",
+    "rootNamespace": "E314.DI",
+    "references": [
+        "E314.DataTypes",
+        "E314.Protect"
+    ],
+    "includePlatforms": [],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false
+}
