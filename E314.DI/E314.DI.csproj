@@ -5,19 +5,20 @@
         <Nullable>disable</Nullable>
         <LangVersion>9</LangVersion>
         <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
-        <Title>E314.DependencyInjection</Title>
+        <Title>E314.DI</Title>
         <Authors>Maksim Epishev (epishev.m@mail.ru)</Authors>
         <Copyright>Copyright (c) 2025 Maksim Epishev (epishev.m@mail.ru)</Copyright>
         <RepositoryType>Git</RepositoryType>
         <Version>1.0.0</Version>
         <PackageId>E314.DI</PackageId>
-        <RepositoryUrl>https://github.com/epishev-m/e314-dependency-injection.git</RepositoryUrl>
-        <PackageProjectUrl>https://github.com/epishev-m/e314-dependency-injection</PackageProjectUrl>
+        <RepositoryUrl>https://github.com/epishev-m/e314-di.git</RepositoryUrl>
+        <PackageProjectUrl>https://github.com/epishev-m/e314-di</PackageProjectUrl>
         <PackageLicenseFile>LICENSE</PackageLicenseFile>
         <PackageReadmeFile>README.md</PackageReadmeFile>
-        <PackageTags>unity</PackageTags>
+        <PackageTags>di unity</PackageTags>
         <AssemblyName>E314.DI</AssemblyName>
         <RootNamespace>E314.DI</RootNamespace>
+        <Description>Dependency injection framework</Description>
     </PropertyGroup>
 
     <ItemGroup>
