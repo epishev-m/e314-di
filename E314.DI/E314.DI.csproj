@@ -1,0 +1,61 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+    <PropertyGroup>
+        <TargetFramework>net6.0</TargetFramework>
+        <Nullable>disable</Nullable>
+        <LangVersion>9</LangVersion>
+        <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
+        <Title>E314.DependencyInjection</Title>
+        <Authors>Maksim Epishev (epishev.m@mail.ru)</Authors>
+        <Copyright>Copyright (c) 2025 Maksim Epishev (epishev.m@mail.ru)</Copyright>
+        <RepositoryType>Git</RepositoryType>
+        <Version>1.0.0</Version>
+        <PackageId>E314.DI</PackageId>
+        <RepositoryUrl>https://github.com/epishev-m/e314-dependency-injection.git</RepositoryUrl>
+        <PackageProjectUrl>https://github.com/epishev-m/e314-dependency-injection</PackageProjectUrl>
+        <PackageLicenseFile>LICENSE</PackageLicenseFile>
+        <PackageReadmeFile>README.md</PackageReadmeFile>
+        <PackageTags>unity</PackageTags>
+        <AssemblyName>E314.DI</AssemblyName>
+        <RootNamespace>E314.DI</RootNamespace>
+    </PropertyGroup>
+
+    <ItemGroup>
+        <None Include="..\UPM\README.md" Pack="true" PackagePath="\" />
+        <None Include="..\LICENSE" Pack="true" PackagePath="\" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <PackageReference Include="E314.DataTypes" Version="1.0.0" />
+      <PackageReference Include="E314.Exceptions" Version="1.1.0" />
+      <PackageReference Include="E314.Protect" Version="2.1.0" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <Compile Include="..\UPM\Runtime\DiBinding\DiBinding.cs">
+        <Link>Runtime\DiBinding\DiBinding.cs</Link>
+      </Compile>
+      <Compile Include="..\UPM\Runtime\DiBinding\IDiBinding.cs">
+        <Link>Runtime\DiBinding\IDiBinding.cs</Link>
+      </Compile>
+      <Compile Include="..\UPM\Runtime\DiContainer\DiContainer.cs">
+        <Link>Runtime\DiContainer\DiContainer.cs</Link>
+      </Compile>
+      <Compile Include="..\UPM\Runtime\DiContainer\IBindingProvider.cs">
+        <Link>Runtime\DiContainer\IBindingProvider.cs</Link>
+      </Compile>
+      <Compile Include="..\UPM\Runtime\DiContainer\IDiContainer.cs">
+        <Link>Runtime\DiContainer\IDiContainer.cs</Link>
+      </Compile>
+      <Compile Include="..\UPM\Runtime\InstanceProvider\ActivatorInstanceProvider.cs">
+        <Link>Runtime\InstanceProvider\ActivatorInstanceProvider.cs</Link>
+      </Compile>
+      <Compile Include="..\UPM\Runtime\InstanceProvider\InjectAttribute.cs">
+        <Link>Runtime\InstanceProvider\InjectAttribute.cs</Link>
+      </Compile>
+      <Compile Include="..\UPM\Runtime\InstanceProvider\ScopeInstanceProvider.cs">
+        <Link>Runtime\InstanceProvider\ScopeInstanceProvider.cs</Link>
+      </Compile>
+    </ItemGroup>
+
+</Project>
