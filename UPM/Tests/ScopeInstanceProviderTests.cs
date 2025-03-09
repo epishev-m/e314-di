@@ -1,5 +1,4 @@
-﻿using System;
-using E314.DataTypes;
+﻿using E314.DataTypes;
 using E314.Exceptions;
 using NUnit.Framework;
 
