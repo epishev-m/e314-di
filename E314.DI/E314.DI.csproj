@@ -19,6 +19,7 @@
         <AssemblyName>E314.DI</AssemblyName>
         <RootNamespace>E314.DI</RootNamespace>
         <Description>Dependency injection framework</Description>
+        <PackageReleaseNotes>https://github.com/epishev-m/e314-di/blob/master/UPM/CHANGELOG.md</PackageReleaseNotes>
     </PropertyGroup>
 
     <ItemGroup>
