@@ -101,6 +101,21 @@ public sealed class DiBinding : Binding<Type, IInstanceProvider>, IDiBinding
 	}
 
 	/// <summary>
+	/// Configures the binding to resolve instances using the specified factory function.
+	/// </summary>
+	/// <param name="factory">The factory function that creates instances of the binding type.</param>
+	/// <returns>The current binding instance for chaining.</returns>
+	public IDiBinding ToFactory(Func<object> factory)
+	{
+		Requires.NotDisposed(IsDisposed);
+		Requires.NotNull(factory, nameof(factory));
+		var instanceProvider = new FactoryInstanceProvider(
+			new InstanceProvider(
+				new Factory(factory)));
+		return (IDiBinding) base.To(instanceProvider);
+	}
+
+	/// <summary>
 	/// Configures the binding to provide a single shared instance (singleton) for all resolutions.
 	/// </summary>
 	public void AsSingle()

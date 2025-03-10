@@ -61,6 +61,13 @@ public interface IDiBinding
 	IDiBinding ToFactory(IFactory factory);
 
 	/// <summary>
+	/// Configures the binding to resolve instances using the specified factory function.
+	/// </summary>
+	/// <param name="factory">The factory function that creates instances of the binding type.</param>
+	/// <returns>The current binding instance for chaining.</returns>
+	IDiBinding ToFactory(Func<object> factory);
+
+	/// <summary>
 	/// Configures the binding to provide a single shared instance (singleton) for all resolutions.
 	/// </summary>
 	void AsSingle();

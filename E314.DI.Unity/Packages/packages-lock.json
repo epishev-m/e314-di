@@ -1,8 +1,8 @@
 {
   "dependencies": {
     "com.e314.datatypes": {
-      "version": "1.0.1",
-      "depth": 1,
+      "version": "1.1.1",
+      "depth": 0,
       "source": "registry",
       "dependencies": {
         "com.e314.protect": "2.1.1"
@@ -14,19 +14,19 @@
       "depth": 0,
       "source": "local",
       "dependencies": {
-        "com.e314.datatypes": "1.0.1"
+        "com.e314.datatypes": "1.1.1"
       }
     },
     "com.e314.exceptions": {
       "version": "1.1.2",
-      "depth": 3,
+      "depth": 2,
       "source": "registry",
       "dependencies": {},
       "url": "https://package.openupm.com"
     },
     "com.e314.protect": {
       "version": "2.1.1",
-      "depth": 2,
+      "depth": 1,
       "source": "registry",
       "dependencies": {
         "com.e314.exceptions": "1.1.2"

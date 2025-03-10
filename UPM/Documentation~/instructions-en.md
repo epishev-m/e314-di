@@ -69,6 +69,15 @@ container.Bind<IMyService>().To(instance);
 
 // Registering a dependency via a factory
 container.Bind<IMyService>().ToFactory<MyServiceFactory>();
+
+// Registering a dependency using a delegate
+container.Bind<IMyService>().ToFactory(() => new MyService());
+
+// Registering with parameter passing through a delegate
+container.Bind<IMyService>().ToFactory(() => {
+    var dependency = new Dependency();
+    return new MyService(dependency);
+});
 ```
 
 ### Nested Containers
@@ -82,7 +91,7 @@ Suppose we have a parent container with a set of bindings. When creating a child
 var parentContainer = new DiContainer();
 parentContainer.Bind<IMyService>().To<MyService>();
 
-// Create a child container that can use the parent’s binding but has the option to override it
+// Create a child container that can use the parent's binding but has the option to override it
 var childContainer = new DiContainer(parentContainer);
 childContainer.Bind<IMyService>().To<MyServiceAlternative>();
 
@@ -123,7 +132,7 @@ When `Resolve` is called, the container looks for a registered binding. If the t
 
 ## Lifecycle Management
 
-The container allows you to define the lifespan of objects. Let’s explore the main options:
+The container allows you to define the lifespan of objects. Let's explore the main options:
 
 ### Transient (AsTransient)
 
@@ -145,7 +154,7 @@ container.Bind<IMyService>().To<MyService>().AsSingle();
 
 The `AsScoped()` method creates a new instance for each scope of the container. This is particularly important when working with nested containers.
 
-If a binding isn’t registered in the child container, it can use the binding from the parent (via the provided `IBindingProvider`), but the result will be cached locally. This means that even if the parent container has a dependency registered as `Scoped`, resolving it in the child container will create a new instance cached in the child container.
+If a binding isn't registered in the child container, it can use the binding from the parent (via the provided `IBindingProvider`), but the result will be cached locally. This means that even if the parent container has a dependency registered as `Scoped`, resolving it in the child container will create a new instance cached in the child container.
 
 Example of working with `AsScoped` and nested containers:
 

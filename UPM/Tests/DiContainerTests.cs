@@ -755,10 +755,127 @@ internal sealed class DiContainerTests
 
 	#endregion
 
+	#region Factory
+
+	[Test]
+	public void Bind_ToFactory_Func_Resolve()
+	{
+		// Act
+		_container.Bind<ITestObject>()
+			.ToFactory(() => new TestObject());
+
+		var actual = _container.Resolve<ITestObject>();
+
+		// Assert
+		Assert.That(actual, Is.Not.Null);
+		Assert.That(actual, Is.InstanceOf<TestObject>());
+	}
+
+	[Test]
+	public void Bind_ToFactory_Func_WithDependency_Resolve()
+	{
+		// Arrange
+		var dependency = new TestObjectToo();
+		_container.Bind<ITestObject>()
+			.To(dependency);
+		
+		// Act
+		_container.Bind<ITestObjectWithDependency>()
+			.ToFactory(() => {
+				var dep = _container.Resolve<ITestObject>();
+				return new TestObjectWithDependency(dep);
+			});
+
+		var actual = _container.Resolve<ITestObjectWithDependency>();
+
+		// Assert
+		Assert.That(actual, Is.Not.Null);
+		Assert.That(actual.Dependency, Is.SameAs(dependency));
+	}
+
+	[Test]
+	public void Bind_ToFactory_Func_Multiple_Resolve()
+	{
+		// Act
+		_container.Bind<ITestObject>()
+			.ToFactory(() => new TestObject())
+			.ToFactory(() => new TestObjectToo());
+
+		var values = _container.Resolve<IReadOnlyList<ITestObject>>();
+
+		// Assert
+		Assert.That(values, Is.Not.Null);
+		Assert.That(values, Has.Count.EqualTo(2));
+		Assert.That(values[0], Is.InstanceOf<TestObject>());
+		Assert.That(values[1], Is.InstanceOf<TestObjectToo>());
+	}
+
+	[Test]
+	public void Bind_ToFactory_Func_AsTransient_NewInstance()
+	{
+		// Act
+		_container.Bind<ITestObject>()
+			.ToFactory(() => new TestObject())
+			.AsTransient();
+
+		var instance1 = _container.Resolve<ITestObject>();
+		var instance2 = _container.Resolve<ITestObject>();
+
+		// Assert
+		Assert.That(instance1, Is.Not.Null);
+		Assert.That(instance2, Is.Not.Null);
+		Assert.That(instance1, Is.Not.SameAs(instance2));
+	}
+
+	[Test]
+	public void Bind_ToFactory_Func_AsSingle_SameInstance()
+	{
+		// Act
+		_container.Bind<ITestObject>()
+			.ToFactory(() => new TestObject())
+			.AsSingle();
+
+		var instance1 = _container.Resolve<ITestObject>();
+		var instance2 = _container.Resolve<ITestObject>();
+
+		// Assert
+		Assert.That(instance1, Is.Not.Null);
+		Assert.That(instance2, Is.Not.Null);
+		Assert.That(instance1, Is.SameAs(instance2));
+	}
+
+	[Test]
+	public void Bind_ToFactory_Func_AsScoped_Parent_Child_DifferentInstances()
+	{
+		// Arrange
+		var parentContainer = new DiContainer();
+		var childContainer = new DiContainer(bindingProvider: parentContainer);
+
+		// Act
+		parentContainer.Bind<ITestObject>()
+			.ToFactory(() => new TestObject())
+			.AsScoped();
+
+		var parentInstance = parentContainer.Resolve<ITestObject>();
+		var childInstance = childContainer.Resolve<ITestObject>();
+
+		// Assert
+		Assert.That(parentInstance, Is.Not.Null);
+		Assert.That(childInstance, Is.Not.Null);
+		Assert.That(parentInstance, Is.Not.SameAs(childInstance));
+	}
+
+	#endregion
+
 	#region Nested
 
 	private interface ITestObject
 	{
+	}
+
+	private interface ITestObjectWithDependency
+	{
+		ITestObject Dependency { get; }
 	}
 
 	[SuppressMessage("ReSharper", "ClassNeverInstantiated.Local")]
@@ -780,6 +897,17 @@ internal sealed class DiContainerTests
 	[SuppressMessage("ReSharper", "ClassNeverInstantiated.Local")]
 	private sealed class TestObjectToo : ITestObject
 	{
+	}
+
+	[SuppressMessage("ReSharper", "ClassNeverInstantiated.Local")]
+	private sealed class TestObjectWithDependency : ITestObjectWithDependency
+	{
+		public ITestObject Dependency { get; }
+
+		public TestObjectWithDependency(ITestObject dependency)
+		{
+			Dependency = dependency;
+		}
 	}
 
 	#endregion

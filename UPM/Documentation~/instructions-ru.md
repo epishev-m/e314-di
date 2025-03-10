@@ -70,6 +70,15 @@ container.Bind<IMyService>().To(instance);
 
 // Регистрация зависимости через фабрику
 container.Bind<IMyService>().ToFactory<MyServiceFactory>();
+
+// Регистрация зависимости через делегат
+container.Bind<IMyService>().ToFactory(() => new MyService());
+
+// Регистрация с передачей параметров через делегат
+container.Bind<IMyService>().ToFactory(() => {
+    var dependency = new Dependency();
+    return new MyService(dependency);
+});
 ```
 
 ### Вложенные контейнеры

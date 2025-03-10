@@ -99,6 +99,24 @@ internal sealed class DiBindingTests
 		Assert.That(instanceProvider, Is.InstanceOf<FactoryInstanceProvider>());
 	}
 
+	[Test]
+	public void ToFunc_InstanceProvider()
+	{
+		// Arrange
+		var obj = new TestObject();
+
+		// Act
+		var binding = _binding.ToFactory(Func);
+		var instanceProvider = _binding.Values[0];
+
+		// Assert
+		Assert.That(binding, Is.EqualTo(_binding));
+		Assert.That(instanceProvider, Is.InstanceOf<FactoryInstanceProvider>());
+		return;
+
+		object Func() => obj;
+	}
+
 	#endregion
 
 	#region AsTransient
@@ -166,6 +184,27 @@ internal sealed class DiBindingTests
 		Assert.That(instance, Is.InstanceOf<TestObject>());
 	}
 
+	[Test]
+	public void ToFunc_AsTransient()
+	{
+		// Arrange
+		var obj = new TestObject();
+
+		// Act
+		_binding.ToFactory(Func)
+			.AsTransient();
+		var instanceProvider = _binding.Values[0];
+		var instance = instanceProvider.GetInstance();
+
+		// Assert
+		Assert.That(instanceProvider, Is.InstanceOf<FactoryInstanceProvider>());
+		Assert.That(instance, Is.InstanceOf<TestObject>());
+		Assert.That(instance, Is.EqualTo(obj));
+		return;
+
+		object Func() => obj;
+	}
+
 	#endregion
 
 	#region AsScoped
@@ -180,12 +219,14 @@ internal sealed class DiBindingTests
 		_binding.To(expected)
 			.AsScoped();
 		var instanceProvider = _binding.Values[0];
-		var actual = instanceProvider.GetInstance();
+		var instance = instanceProvider.GetInstance();
+		var instanceToo = instanceProvider.GetInstance();
 
 		// Assert
 		Assert.That(instanceProvider, Is.InstanceOf<ScopeInstanceProvider>());
-		Assert.That(actual, Is.InstanceOf<TestObject>());
-		Assert.That(actual, Is.EqualTo(expected));
+		Assert.That(instance, Is.InstanceOf<TestObject>());
+		Assert.That(instance, Is.EqualTo(expected));
+		Assert.That(instance, Is.EqualTo(instanceToo));
 	}
 
 	[Test]
@@ -231,6 +272,23 @@ internal sealed class DiBindingTests
 		// Assert
 		Assert.That(instanceProvider, Is.InstanceOf<ScopeInstanceProvider>());
 		Assert.That(instance, Is.InstanceOf<TestObject>());
+	}
+
+	[Test]
+	public void ToFunc_AsScope()
+	{
+		// Act
+		_binding.ToFactory(Func)
+			.AsScoped();
+		var instanceProvider = _binding.Values[0];
+		var instance = instanceProvider.GetInstance();
+
+		// Assert
+		Assert.That(instanceProvider, Is.InstanceOf<ScopeInstanceProvider>());
+		Assert.That(instance, Is.InstanceOf<TestObject>());
+		return;
+
+		object Func() => new TestObject();
 	}
 
 	#endregion
@@ -310,6 +368,26 @@ internal sealed class DiBindingTests
 		Assert.That(instanceProvider, Is.InstanceOf<SingletonInstanceProvider>());
 		Assert.That(instance, Is.InstanceOf<TestObject>());
 		Assert.That(instanceToo, Is.EqualTo(instance));
+	}
+
+	[Test]
+	public void ToFunc_AsSingle()
+	{
+		// Act
+		_binding.ToFactory(Func)
+			.AsSingle();
+
+		var instanceProvider = _binding.Values[0];
+		var instance = instanceProvider.GetInstance();
+		var instanceToo = instanceProvider.GetInstance();
+
+		// Assert
+		Assert.That(instanceProvider, Is.InstanceOf<SingletonInstanceProvider>());
+		Assert.That(instance, Is.InstanceOf<TestObject>());
+		Assert.That(instanceToo, Is.EqualTo(instance));
+		return;
+
+		object Func() => new TestObject();
 	}
 
 	#endregion

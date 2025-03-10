@@ -46,6 +46,13 @@ public class Benchmark
 	}
 
 	[Benchmark]
+	public void BindFactory()
+	{
+		var container = new DiContainer();
+		container.Bind<ITransient1>().ToFactory(() => new Transient1());
+	}
+
+	[Benchmark]
 	public void ResolveTransient()
 	{
 		var container = new DiContainer();
@@ -67,6 +74,14 @@ public class Benchmark
 		var container = new DiContainer();
 		container.Bind<IScope1>().To<Scope1>().AsScoped();
 		container.Resolve<IScope1>();
+	}
+
+	[Benchmark]
+	public void ResolveFactory()
+	{
+		var container = new DiContainer();
+		container.Bind<ITransient1>().ToFactory(() => new Transient1());
+		container.Resolve<ITransient1>();
 	}
 
 	[Benchmark]
