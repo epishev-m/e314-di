@@ -1,6 +1,7 @@
 # E314.DataTypes
 
-The `E314.DependencyInjection` module
+The `E314.DI` module contains the `DiContainer`.
+`DiContainer` is a dependency injection (DI) container that helps manage object creation and their dependencies.
 
 ## Installation
 
