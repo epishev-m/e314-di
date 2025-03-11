@@ -109,9 +109,7 @@ public sealed class DiBinding : Binding<Type, IInstanceProvider>, IDiBinding
 	{
 		Requires.NotDisposed(IsDisposed);
 		Requires.NotNull(factory, nameof(factory));
-		var instanceProvider = new FactoryInstanceProvider(
-			new InstanceProvider(
-				new Factory(factory)));
+		var instanceProvider = new FactoryInstanceProvider(new Factory(factory));
 		return (IDiBinding) base.To(instanceProvider);
 	}
 
