@@ -68,6 +68,17 @@ public interface IDiBinding
 	IDiBinding ToFactory(Func<object> factory);
 
 	/// <summary>
+	/// Configures the binding to use a custom instance provider
+	/// </summary>
+	/// <remarks>
+	/// This method is primarily intended for custom functionality extensions,
+	/// allowing custom instance creation logic through <see cref="IInstanceProvider"/> implementation
+	/// </remarks>
+	/// <param name="instanceProvider">Custom instance provider implementing <see cref="IInstanceProvider"/></param>
+	/// <returns>Current binding instance for chaining</returns>
+	IDiBinding ToInstanceProvider(IInstanceProvider provider);
+
+	/// <summary>
 	/// Configures the binding to provide a single shared instance (singleton) for all resolutions.
 	/// </summary>
 	void AsSingle();

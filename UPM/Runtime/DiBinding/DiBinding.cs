@@ -114,6 +114,22 @@ public sealed class DiBinding : Binding<Type, IInstanceProvider>, IDiBinding
 	}
 
 	/// <summary>
+	/// Configures the binding to use a custom instance provider
+	/// </summary>
+	/// <remarks>
+	/// This method is primarily intended for custom functionality extensions,
+	/// allowing custom instance creation logic through <see cref="IInstanceProvider"/> implementation
+	/// </remarks>
+	/// <param name="instanceProvider">Custom instance provider implementing <see cref="IInstanceProvider"/></param>
+	/// <returns>Current binding instance for chaining</returns>
+	public IDiBinding ToInstanceProvider(IInstanceProvider instanceProvider)
+	{
+		Requires.NotDisposed(IsDisposed);
+		Requires.NotNull(instanceProvider, nameof(instanceProvider));
+		return (IDiBinding) base.To(instanceProvider);
+	}
+
+	/// <summary>
 	/// Configures the binding to provide a single shared instance (singleton) for all resolutions.
 	/// </summary>
 	public void AsSingle()

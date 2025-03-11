@@ -13,6 +13,7 @@ The `E314.DI` module contains the `DiContainer`.
   - [Core Concepts](#core-concepts)
   - [Container Configuration](#container-configuration)
   - [Creating Bindings](#creating-bindings)
+    - [Extension Mechanism via Instance Providers](#extension-mechanism-via-instance-providers)
     - [Nested Containers](#nested-containers)
     - [Types with Multiple Constructors](#types-with-multiple-constructors)
   - [Dependency Resolution](#dependency-resolution)
@@ -36,8 +37,8 @@ The `E314.DI` module contains the `DiContainer`.
 
 **Lifecycle Management** determines how long an object exists within the container:
 
-- Singleton (AsSingle): A single instance is created once for the container’s entire lifetime.
-- Scoped (AsScoped): An object is created once per scope. When using nested containers, the current (child) container is checked first for a binding; if none exists, the parent’s binding is used.
+- Singleton (AsSingle): A single instance is created once for the container's entire lifetime.
+- Scoped (AsScoped): An object is created once per scope. When using nested containers, the current (child) container is checked first for a binding; if none exists, the parent's binding is used.
 - Transient (AsTransient): A new instance is created each time a dependency is resolved.
 
 ## Container Configuration
@@ -78,7 +79,27 @@ container.Bind<IMyService>().ToFactory(() => {
     var dependency = new Dependency();
     return new MyService(dependency);
 });
+
+// Registering a dependency using a custom instance provider
+var provider = new InstanceProvider(new MyService());
+container.Bind<IMyService>().ToInstanceProvider(provider);
 ```
+
+### Extension Mechanism via Instance Providers
+
+The `ToInstanceProvider` method allows registering dependencies through custom providers implementing the `IInstanceProvider` interface. This extension mechanism gives developers full control over the instance creation process and their lifecycle.
+
+Key Features:
+
+- Full provider responsibility for managing the instance lifecycle
+- Single instance per dependency resolution by default
+- Support for multiple provider registrations for a single type
+- Seamless provider usage across container hierarchies (parent + child)
+- Ability to implement custom strategies:
+  - Instance caching management
+  - Dynamic object creation
+  - Conditional instantiation
+  - Custom dependency resolution logic
 
 ### Nested Containers
 

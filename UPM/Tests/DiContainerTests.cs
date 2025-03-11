@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
+using E314.DataTypes;
 using E314.Exceptions;
 using NUnit.Framework;
 
@@ -751,6 +752,82 @@ internal sealed class DiContainerTests
 
 		// Assert
 		Assert.That(testObject.IsEmpty, Is.False);
+	}
+
+	#endregion
+
+	#region InstanceProvider
+
+	[Test]
+	public void Bind_ToInstanceProvider_Resolve()
+	{
+		// Arrange
+		var instance = new TestObject();
+		var provider = new InstanceProvider(instance);
+
+		// Act
+		_container.Bind<ITestObject>()
+			.ToInstanceProvider(provider);
+
+		var actual = _container.Resolve<ITestObject>();
+
+		// Assert
+		Assert.That(actual, Is.Not.Null);
+		Assert.That(actual, Is.SameAs(instance));
+	}
+
+	[Test]
+	public void Bind_ToInstanceProvider_Multiple_Resolve()
+	{
+		// Arrange
+		var instance1 = new TestObject();
+		var instance2 = new TestObjectToo();
+		var provider1 = new InstanceProvider(instance1);
+		var provider2 = new InstanceProvider(instance2);
+
+		// Act
+		_container.Bind<ITestObject>()
+			.ToInstanceProvider(provider1)
+			.ToInstanceProvider(provider2);
+
+		var values = _container.Resolve<IReadOnlyList<ITestObject>>();
+
+		// Assert
+		Assert.That(values, Is.Not.Null);
+		Assert.That(values, Has.Count.EqualTo(2));
+		Assert.That(values[0], Is.SameAs(instance1));
+		Assert.That(values[1], Is.SameAs(instance2));
+	}
+
+	[Test]
+	public void Bind_ToInstanceProvider_Parent_Child_SameInstance()
+	{
+		// Arrange
+		var parentContainer = new DiContainer();
+		var childContainer = new DiContainer(bindingProvider: parentContainer);
+		var instance = new TestObject();
+		var provider = new InstanceProvider(instance);
+
+		// Act
+		parentContainer.Bind<ITestObject>()
+			.ToInstanceProvider(provider);
+
+		var parentInstance = parentContainer.Resolve<ITestObject>();
+		var childInstance = childContainer.Resolve<ITestObject>();
+
+		// Assert
+		Assert.That(parentInstance, Is.Not.Null);
+		Assert.That(childInstance, Is.Not.Null);
+		Assert.That(parentInstance, Is.SameAs(instance));
+		Assert.That(childInstance, Is.SameAs(instance));
+		Assert.That(parentInstance, Is.SameAs(childInstance));
+	}
+
+	[Test]
+	public void Bind_ToInstanceProvider_Null_ThrowsException()
+	{
+		// Act & Assert
+		Assert.Throws<ArgNullException>(() => _container.Bind<ITestObject>().ToInstanceProvider(null));
 	}
 
 	#endregion

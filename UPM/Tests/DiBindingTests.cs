@@ -117,6 +117,47 @@ internal sealed class DiBindingTests
 		object Func() => obj;
 	}
 
+	[Test]
+	public void ToInstanceProvider_NotNull()
+	{
+		// Arrange
+		var provider = new InstanceProvider(new TestObject());
+
+		// Act
+		var binding = _binding.ToInstanceProvider(provider);
+		var instanceProvider = _binding.Values[0];
+
+		// Assert
+		Assert.That(binding, Is.EqualTo(_binding));
+		Assert.That(instanceProvider, Is.EqualTo(provider));
+	}
+
+	[Test]
+	public void ToInstanceProvider_Null_ThrowsException()
+	{
+		// Act & Assert
+		Assert.Throws<ArgNullException>(() => _binding.ToInstanceProvider(null));
+	}
+
+	[Test]
+	public void ToInstanceProvider_MultipleProviders()
+	{
+		// Arrange
+		var provider1 = new InstanceProvider(new TestObject());
+		var provider2 = new InstanceProvider(new TestObject());
+
+		// Act
+		_binding.ToInstanceProvider(provider1)
+			.ToInstanceProvider(provider2);
+
+		var providers = _binding.Values.ToList();
+
+		// Assert
+		Assert.That(providers.Count, Is.EqualTo(2));
+		Assert.That(providers[0], Is.EqualTo(provider1));
+		Assert.That(providers[1], Is.EqualTo(provider2));
+	}
+
 	#endregion
 
 	#region AsTransient
